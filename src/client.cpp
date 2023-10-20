@@ -39,11 +39,16 @@ private:
 
 int main() {
     std::string server_address("localhost:50051");
-    GreeterClient greeter(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
-
-    std::string user("World");
-    std::string response = greeter.SayHello(user);
-    std::cout << "Greeting: " << response << std::endl;
-
+    while (true) {
+        try {
+            GreeterClient greeter(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+            std::string user("World");
+            std::string response = greeter.SayHello(user);
+            std::cout << "Greeting: " << response << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Exception caught: " << e.what() << std::endl;
+        }
+    }
+   
     return 0;
 }
