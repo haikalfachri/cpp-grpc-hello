@@ -27,23 +27,27 @@ public:
         std::string prefix("Hello, ");
         reply->set_message(prefix + request->name());
         publisher.send(zmq::str_buffer("Hello"), zmq::send_flags::sndmore);
-        publisher.send(zmq::buffer(request->name()), zmq::send_flags::sndmore);
-        // std::cout << "Sent: " << request->name() << std::endl;
+        publisher.send(zmq::buffer(request->name()));
+        std::cout << "Sent: " << request->name() << std::endl;
         return Status::OK;
     }
 };
 
 void RunPublisher()
-{
-    publisher.bind("tcp://192.168.2.173:5001");
+{   
+    // bind all ip
+    publisher.bind("tcp://*:5555");
 }
 
 void RunSubscriber()
 {   
-    subscriber.connect("tcp://192.168.2.173:5001");
+    // another service zeromq ip address 
+    subscriber.connect("tcp://192.168.2.64:5001");
     subscriber.set(zmq::sockopt::subscribe, "Hello");
 
-    std::cout << "Subscriber listen!" << std::endl;
+    if (subscriber.connected()){
+        std::cout << "Subscriber listen!" << std::endl;
+    }
 
     while (true)
     {
@@ -62,7 +66,8 @@ void RunServer()
     std::cout << "hello world" << std::endl;
 
     try
-    {
+    {   
+        // self grpc ip
         std::string server_address("192.168.2.173:5000");
         GreeterServiceImpl service;
 
