@@ -38,7 +38,7 @@ private:
 };
 
 int main() {
-    std::string server_address("localhost:50051");
+    std::string server_address("localhost:5000");
     while (true) {
         try {
             GreeterClient greeter(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));

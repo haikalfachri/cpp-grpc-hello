@@ -26,7 +26,7 @@ void RunServer() {
     std::cout <<"hello world" << std::endl;
 
     try {
-        std::string server_address("localhost:50051");
+        std::string server_address("localhost:5000");
         GreeterServiceImpl service;
 
         ServerBuilder builder;
