@@ -13,19 +13,27 @@ int main()
 
     // construct a PUB (publisher) socket and connect to interface
     zmq::socket_t publisher{context, zmq::socket_type::pub};
-    publisher.bind("tcp://*:5001");
+    publisher.bind("tcp://localhost:5001");
 
     int i = 0;
     while (!_kbhit()) {
-        //  Write three messages, each with an envelope and content
+        // Create a stringstream to build the message
+        std::stringstream ss;
+        ss << "Hello " << i;
+
+        // Convert the stringstream to a string
+        std::string message = ss.str();
+
+        // Send the message
         publisher.send(zmq::str_buffer("Hello"), zmq::send_flags::sndmore);
-        publisher.send(zmq::str_buffer("Hello!"));
-        std::cout << "[Hello] Hello!" << std::endl;
+        publisher.send(zmq::buffer(message));
+        std::cout << "[Hello] " << message << std::endl;
         i++;
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    while (true) {
+    while (true)
+    {
         std::cout << "Not send!" << std::endl;
     }
 

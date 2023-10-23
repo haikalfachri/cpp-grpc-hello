@@ -60,3 +60,8 @@ is the same version on .pb.h to prevent error when build the app
 protoc -I ./ --grpc_out=src --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe helloworld.proto
 protoc -I ./ --cpp_out=src helloworld.proto
 ```
+6. Install ZeroMQ with vcpkg
+
+```
+vcpkg install cppzmq
+```
