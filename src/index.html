@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    var eventSource = new EventSource("http://localhost:8080");
+    eventSource.onmessage = function(event) {
+      console.log(event.data);
+    };
+  </script>
+</head>
+<body>
+  <h1>Server-Sent Events</h1>
+</body>
+</html>
