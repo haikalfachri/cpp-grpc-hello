@@ -13,6 +13,7 @@
 #include <nlohmann/json.hpp>
 #include <pqxx/pqxx>
 #include <sstream>
+#include "rapidjson/document.h"
 
 using namespace std;
 using namespace boost::asio;
@@ -34,16 +35,16 @@ zmq::socket_t publisher{context, zmq::socket_type::pub};
 zmq::socket_t subscriber{context, zmq::socket_type::sub};
 std::string message;
 
-pqxx::connection c("postgresql://postgres:postgres@localhost:5433/cpp-grpc-crud");
+pqxx::connection c("postgresql://postgres:postgres@localhost:5432/cpp-grpc-crud");
 
 class UserServiceImpl final : public UserService::Service
 {
 public:
-
     Status CreateUser(ServerContext *context, const User *request, User *response) override
     {
 
         User newUser;
+        newUser.set_name(request->name());
 
         auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
@@ -100,7 +101,8 @@ public:
 
         txn.commit();
 
-        if (res.empty()) {
+        if (res.empty())
+        {
             return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
 
@@ -135,18 +137,21 @@ public:
     Status UpdateUser(ServerContext *context, const User *request, User *response) override
     {
         int64_t userId = request->id();
-        auto it = users_.find(userId);
-        if (it != users_.end())
-        {
-            User &existingUser = it->second;
-            existingUser.set_name(request->name());
-            *response = existingUser;
-            return Status::OK;
-        }
-        else
+
+        pqxx::work txn(c);
+
+        pqxx::result res = txn.exec("SELECT * FROM users WHERE id = " + std::to_string(userId));
+
+        if (res.empty())
         {
             return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
+
+        txn.exec("INSERT INTO users (name, updated_at) VALUES ( '" + request->name() + "', NOW()) WHERE id = " + std::to_string(userId) + ")");
+
+        txn.commit();
+
+        return Status::OK;
     }
 
     Status DeleteUser(ServerContext *context, const Int64Value *request, Empty *response) override
@@ -201,7 +206,7 @@ void StartDB()
 
 void RunPublisher()
 {
-    publisher.bind("tcp://localhost:5003");
+    publisher.bind("tcp://localhost:5053");
 }
 
 void RunSSESubscriber()
@@ -234,7 +239,40 @@ void RunSSESubscriber()
         zmq::recv_result_t result = zmq::recv_multipart(subscriber, std::back_inserter(recv_msgs));
         assert(result && "recv failed");
         assert(*result == 2);
-        message = "data: " + recv_msgs[1].to_string() + "\r\n\r\n";
+        rapidjson::Document data;
+        std::string recvMessage = recv_msgs[1].to_string();
+        data.Parse(recvMessage.c_str());
+        User user;
+        if (data.IsObject())
+        {
+            if (data.HasMember("id") && data["id"].IsInt64())
+            {
+                user.set_id(data["id"].GetInt64());
+            }
+
+            if (data.HasMember("name") && data["name"].IsString())
+            {
+                user.set_name(data["name"].GetString());
+            }
+
+            if (data.HasMember("created_at") && data["created_at"].IsString())
+            {
+                user.set_created_at(data["created_at"].GetString());
+            }
+
+            if (data.HasMember("updated_at") && data["updated_at"].IsString())
+            {
+                user.set_updated_at(data["updated_at"].GetString());
+            }
+        }
+
+        pqxx::work txn(c);
+
+        txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" + std::to_string(user.id()) + ", '" + user.name() + "', '" + user.created_at() + "', '" + user.updated_at() + "')");
+        // txn.exec("INSERT INTO users (name, created_at, updated_at) VALUES ('" + user.name() + "', '" + user.created_at() + "', '" + user.updated_at() + "')");
+
+        txn.commit();
+        message = "data: " + recvMessage + "\r\n\r\n";
         socket.write_some(buffer(message));
         std::cout << "Subscriber: " << message << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
