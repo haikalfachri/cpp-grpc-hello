@@ -30,7 +30,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
-#include <google/protobuf/timestamp.pb.h>
 #include <google/protobuf/wrappers.pb.h>
 #include <google/protobuf/empty.pb.h>
 // @@protoc_insertion_point(includes)
@@ -199,41 +198,33 @@ class User final :
   std::string* _internal_mutable_name();
   public:
 
-  // .google.protobuf.Timestamp created_at = 3;
-  bool has_created_at() const;
-  private:
-  bool _internal_has_created_at() const;
-  public:
+  // string created_at = 3;
   void clear_created_at();
-  const ::PROTOBUF_NAMESPACE_ID::Timestamp& created_at() const;
-  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::Timestamp* release_created_at();
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* mutable_created_at();
-  void set_allocated_created_at(::PROTOBUF_NAMESPACE_ID::Timestamp* created_at);
+  const std::string& created_at() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_created_at(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_created_at();
+  PROTOBUF_NODISCARD std::string* release_created_at();
+  void set_allocated_created_at(std::string* created_at);
   private:
-  const ::PROTOBUF_NAMESPACE_ID::Timestamp& _internal_created_at() const;
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* _internal_mutable_created_at();
+  const std::string& _internal_created_at() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_created_at(const std::string& value);
+  std::string* _internal_mutable_created_at();
   public:
-  void unsafe_arena_set_allocated_created_at(
-      ::PROTOBUF_NAMESPACE_ID::Timestamp* created_at);
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* unsafe_arena_release_created_at();
 
-  // .google.protobuf.Timestamp updated_at = 4;
-  bool has_updated_at() const;
-  private:
-  bool _internal_has_updated_at() const;
-  public:
+  // string updated_at = 4;
   void clear_updated_at();
-  const ::PROTOBUF_NAMESPACE_ID::Timestamp& updated_at() const;
-  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::Timestamp* release_updated_at();
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* mutable_updated_at();
-  void set_allocated_updated_at(::PROTOBUF_NAMESPACE_ID::Timestamp* updated_at);
+  const std::string& updated_at() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_updated_at(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_updated_at();
+  PROTOBUF_NODISCARD std::string* release_updated_at();
+  void set_allocated_updated_at(std::string* updated_at);
   private:
-  const ::PROTOBUF_NAMESPACE_ID::Timestamp& _internal_updated_at() const;
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* _internal_mutable_updated_at();
+  const std::string& _internal_updated_at() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_updated_at(const std::string& value);
+  std::string* _internal_mutable_updated_at();
   public:
-  void unsafe_arena_set_allocated_updated_at(
-      ::PROTOBUF_NAMESPACE_ID::Timestamp* updated_at);
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* unsafe_arena_release_updated_at();
 
   // int64 id = 1;
   void clear_id();
@@ -253,8 +244,8 @@ class User final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
-    ::PROTOBUF_NAMESPACE_ID::Timestamp* created_at_;
-    ::PROTOBUF_NAMESPACE_ID::Timestamp* updated_at_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr created_at_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr updated_at_;
     int64_t id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -342,173 +333,103 @@ inline void User::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:user.User.name)
 }
 
-// .google.protobuf.Timestamp created_at = 3;
-inline bool User::_internal_has_created_at() const {
-  return this != internal_default_instance() && _impl_.created_at_ != nullptr;
+// string created_at = 3;
+inline void User::clear_created_at() {
+  _impl_.created_at_.ClearToEmpty();
 }
-inline bool User::has_created_at() const {
-  return _internal_has_created_at();
-}
-inline const ::PROTOBUF_NAMESPACE_ID::Timestamp& User::_internal_created_at() const {
-  const ::PROTOBUF_NAMESPACE_ID::Timestamp* p = _impl_.created_at_;
-  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Timestamp&>(
-      ::PROTOBUF_NAMESPACE_ID::_Timestamp_default_instance_);
-}
-inline const ::PROTOBUF_NAMESPACE_ID::Timestamp& User::created_at() const {
+inline const std::string& User::created_at() const {
   // @@protoc_insertion_point(field_get:user.User.created_at)
   return _internal_created_at();
 }
-inline void User::unsafe_arena_set_allocated_created_at(
-    ::PROTOBUF_NAMESPACE_ID::Timestamp* created_at) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.created_at_);
-  }
-  _impl_.created_at_ = created_at;
-  if (created_at) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:user.User.created_at)
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void User::set_created_at(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.created_at_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:user.User.created_at)
 }
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::release_created_at() {
-  
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* temp = _impl_.created_at_;
-  _impl_.created_at_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::unsafe_arena_release_created_at() {
-  // @@protoc_insertion_point(field_release:user.User.created_at)
-  
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* temp = _impl_.created_at_;
-  _impl_.created_at_ = nullptr;
-  return temp;
-}
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::_internal_mutable_created_at() {
-  
-  if (_impl_.created_at_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::Timestamp>(GetArenaForAllocation());
-    _impl_.created_at_ = p;
-  }
-  return _impl_.created_at_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::mutable_created_at() {
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* _msg = _internal_mutable_created_at();
+inline std::string* User::mutable_created_at() {
+  std::string* _s = _internal_mutable_created_at();
   // @@protoc_insertion_point(field_mutable:user.User.created_at)
-  return _msg;
+  return _s;
 }
-inline void User::set_allocated_created_at(::PROTOBUF_NAMESPACE_ID::Timestamp* created_at) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.created_at_);
-  }
-  if (created_at) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(created_at));
-    if (message_arena != submessage_arena) {
-      created_at = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, created_at, submessage_arena);
-    }
+inline const std::string& User::_internal_created_at() const {
+  return _impl_.created_at_.Get();
+}
+inline void User::_internal_set_created_at(const std::string& value) {
+  
+  _impl_.created_at_.Set(value, GetArenaForAllocation());
+}
+inline std::string* User::_internal_mutable_created_at() {
+  
+  return _impl_.created_at_.Mutable(GetArenaForAllocation());
+}
+inline std::string* User::release_created_at() {
+  // @@protoc_insertion_point(field_release:user.User.created_at)
+  return _impl_.created_at_.Release();
+}
+inline void User::set_allocated_created_at(std::string* created_at) {
+  if (created_at != nullptr) {
     
   } else {
     
   }
-  _impl_.created_at_ = created_at;
+  _impl_.created_at_.SetAllocated(created_at, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.created_at_.IsDefault()) {
+    _impl_.created_at_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:user.User.created_at)
 }
 
-// .google.protobuf.Timestamp updated_at = 4;
-inline bool User::_internal_has_updated_at() const {
-  return this != internal_default_instance() && _impl_.updated_at_ != nullptr;
+// string updated_at = 4;
+inline void User::clear_updated_at() {
+  _impl_.updated_at_.ClearToEmpty();
 }
-inline bool User::has_updated_at() const {
-  return _internal_has_updated_at();
-}
-inline const ::PROTOBUF_NAMESPACE_ID::Timestamp& User::_internal_updated_at() const {
-  const ::PROTOBUF_NAMESPACE_ID::Timestamp* p = _impl_.updated_at_;
-  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Timestamp&>(
-      ::PROTOBUF_NAMESPACE_ID::_Timestamp_default_instance_);
-}
-inline const ::PROTOBUF_NAMESPACE_ID::Timestamp& User::updated_at() const {
+inline const std::string& User::updated_at() const {
   // @@protoc_insertion_point(field_get:user.User.updated_at)
   return _internal_updated_at();
 }
-inline void User::unsafe_arena_set_allocated_updated_at(
-    ::PROTOBUF_NAMESPACE_ID::Timestamp* updated_at) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.updated_at_);
-  }
-  _impl_.updated_at_ = updated_at;
-  if (updated_at) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:user.User.updated_at)
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void User::set_updated_at(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.updated_at_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:user.User.updated_at)
 }
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::release_updated_at() {
-  
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* temp = _impl_.updated_at_;
-  _impl_.updated_at_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::unsafe_arena_release_updated_at() {
-  // @@protoc_insertion_point(field_release:user.User.updated_at)
-  
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* temp = _impl_.updated_at_;
-  _impl_.updated_at_ = nullptr;
-  return temp;
-}
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::_internal_mutable_updated_at() {
-  
-  if (_impl_.updated_at_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::Timestamp>(GetArenaForAllocation());
-    _impl_.updated_at_ = p;
-  }
-  return _impl_.updated_at_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::Timestamp* User::mutable_updated_at() {
-  ::PROTOBUF_NAMESPACE_ID::Timestamp* _msg = _internal_mutable_updated_at();
+inline std::string* User::mutable_updated_at() {
+  std::string* _s = _internal_mutable_updated_at();
   // @@protoc_insertion_point(field_mutable:user.User.updated_at)
-  return _msg;
+  return _s;
 }
-inline void User::set_allocated_updated_at(::PROTOBUF_NAMESPACE_ID::Timestamp* updated_at) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.updated_at_);
-  }
-  if (updated_at) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(updated_at));
-    if (message_arena != submessage_arena) {
-      updated_at = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, updated_at, submessage_arena);
-    }
+inline const std::string& User::_internal_updated_at() const {
+  return _impl_.updated_at_.Get();
+}
+inline void User::_internal_set_updated_at(const std::string& value) {
+  
+  _impl_.updated_at_.Set(value, GetArenaForAllocation());
+}
+inline std::string* User::_internal_mutable_updated_at() {
+  
+  return _impl_.updated_at_.Mutable(GetArenaForAllocation());
+}
+inline std::string* User::release_updated_at() {
+  // @@protoc_insertion_point(field_release:user.User.updated_at)
+  return _impl_.updated_at_.Release();
+}
+inline void User::set_allocated_updated_at(std::string* updated_at) {
+  if (updated_at != nullptr) {
     
   } else {
     
   }
-  _impl_.updated_at_ = updated_at;
+  _impl_.updated_at_.SetAllocated(updated_at, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.updated_at_.IsDefault()) {
+    _impl_.updated_at_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:user.User.updated_at)
 }
 

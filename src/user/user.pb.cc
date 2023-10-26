@@ -24,8 +24,8 @@ namespace user {
 PROTOBUF_CONSTEXPR User::User(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.created_at_)*/nullptr
-  , /*decltype(_impl_.updated_at_)*/nullptr
+  , /*decltype(_impl_.created_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.updated_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.id_)*/int64_t{0}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct UserDefaultTypeInternal {
@@ -63,30 +63,27 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_user_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\nuser.proto\022\004user\032\037google/protobuf/time"
-  "stamp.proto\032\036google/protobuf/wrappers.pr"
-  "oto\032\033google/protobuf/empty.proto\"\200\001\n\004Use"
-  "r\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\022.\n\ncreated_a"
-  "t\030\003 \001(\0132\032.google.protobuf.Timestamp\022.\n\nu"
-  "pdated_at\030\004 \001(\0132\032.google.protobuf.Timest"
-  "amp2\204\002\n\013UserService\022$\n\nCreateUser\022\n.user"
-  ".User\032\n.user.User\0223\n\010ReadUser\022\033.google.p"
-  "rotobuf.Int64Value\032\n.user.User\022$\n\nUpdate"
-  "User\022\n.user.User\032\n.user.User\022A\n\nDeleteUs"
-  "er\022\033.google.protobuf.Int64Value\032\026.google"
-  ".protobuf.Empty\0221\n\tListUsers\022\026.google.pr"
-  "otobuf.Empty\032\n.user.User0\001b\006proto3"
+  "\n\nuser.proto\022\004user\032\036google/protobuf/wrap"
+  "pers.proto\032\033google/protobuf/empty.proto\""
+  "H\n\004User\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\022\022\n\ncre"
+  "ated_at\030\003 \001(\t\022\022\n\nupdated_at\030\004 \001(\t2\204\002\n\013Us"
+  "erService\022$\n\nCreateUser\022\n.user.User\032\n.us"
+  "er.User\0223\n\010ReadUser\022\033.google.protobuf.In"
+  "t64Value\032\n.user.User\022$\n\nUpdateUser\022\n.use"
+  "r.User\032\n.user.User\022A\n\nDeleteUser\022\033.googl"
+  "e.protobuf.Int64Value\032\026.google.protobuf."
+  "Empty\0221\n\tListUsers\022\026.google.protobuf.Emp"
+  "ty\032\n.user.User0\001b\006proto3"
   ;
-static const ::_pbi::DescriptorTable* const descriptor_table_user_2eproto_deps[3] = {
+static const ::_pbi::DescriptorTable* const descriptor_table_user_2eproto_deps[2] = {
   &::descriptor_table_google_2fprotobuf_2fempty_2eproto,
-  &::descriptor_table_google_2fprotobuf_2ftimestamp_2eproto,
   &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_user_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_user_2eproto = {
-    false, false, 514, descriptor_table_protodef_user_2eproto,
+    false, false, 424, descriptor_table_protodef_user_2eproto,
     "user.proto",
-    &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_deps, 3, 1,
+    &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_deps, 2, 1,
     schemas, file_default_instances, TableStruct_user_2eproto::offsets,
     file_level_metadata_user_2eproto, file_level_enum_descriptors_user_2eproto,
     file_level_service_descriptors_user_2eproto,
@@ -103,30 +100,8 @@ namespace user {
 
 class User::_Internal {
  public:
-  static const ::PROTOBUF_NAMESPACE_ID::Timestamp& created_at(const User* msg);
-  static const ::PROTOBUF_NAMESPACE_ID::Timestamp& updated_at(const User* msg);
 };
 
-const ::PROTOBUF_NAMESPACE_ID::Timestamp&
-User::_Internal::created_at(const User* msg) {
-  return *msg->_impl_.created_at_;
-}
-const ::PROTOBUF_NAMESPACE_ID::Timestamp&
-User::_Internal::updated_at(const User* msg) {
-  return *msg->_impl_.updated_at_;
-}
-void User::clear_created_at() {
-  if (GetArenaForAllocation() == nullptr && _impl_.created_at_ != nullptr) {
-    delete _impl_.created_at_;
-  }
-  _impl_.created_at_ = nullptr;
-}
-void User::clear_updated_at() {
-  if (GetArenaForAllocation() == nullptr && _impl_.updated_at_ != nullptr) {
-    delete _impl_.updated_at_;
-  }
-  _impl_.updated_at_ = nullptr;
-}
 User::User(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -138,8 +113,8 @@ User::User(const User& from)
   User* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
-    , decltype(_impl_.created_at_){nullptr}
-    , decltype(_impl_.updated_at_){nullptr}
+    , decltype(_impl_.created_at_){}
+    , decltype(_impl_.updated_at_){}
     , decltype(_impl_.id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -152,11 +127,21 @@ User::User(const User& from)
     _this->_impl_.name_.Set(from._internal_name(), 
       _this->GetArenaForAllocation());
   }
-  if (from._internal_has_created_at()) {
-    _this->_impl_.created_at_ = new ::PROTOBUF_NAMESPACE_ID::Timestamp(*from._impl_.created_at_);
+  _impl_.created_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.created_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_created_at().empty()) {
+    _this->_impl_.created_at_.Set(from._internal_created_at(), 
+      _this->GetArenaForAllocation());
   }
-  if (from._internal_has_updated_at()) {
-    _this->_impl_.updated_at_ = new ::PROTOBUF_NAMESPACE_ID::Timestamp(*from._impl_.updated_at_);
+  _impl_.updated_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.updated_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_updated_at().empty()) {
+    _this->_impl_.updated_at_.Set(from._internal_updated_at(), 
+      _this->GetArenaForAllocation());
   }
   _this->_impl_.id_ = from._impl_.id_;
   // @@protoc_insertion_point(copy_constructor:user.User)
@@ -168,14 +153,22 @@ inline void User::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
-    , decltype(_impl_.created_at_){nullptr}
-    , decltype(_impl_.updated_at_){nullptr}
+    , decltype(_impl_.created_at_){}
+    , decltype(_impl_.updated_at_){}
     , decltype(_impl_.id_){int64_t{0}}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.created_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.created_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.updated_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.updated_at_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -191,8 +184,8 @@ User::~User() {
 inline void User::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.name_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.created_at_;
-  if (this != internal_default_instance()) delete _impl_.updated_at_;
+  _impl_.created_at_.Destroy();
+  _impl_.updated_at_.Destroy();
 }
 
 void User::SetCachedSize(int size) const {
@@ -206,14 +199,8 @@ void User::Clear() {
   (void) cached_has_bits;
 
   _impl_.name_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.created_at_ != nullptr) {
-    delete _impl_.created_at_;
-  }
-  _impl_.created_at_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.updated_at_ != nullptr) {
-    delete _impl_.updated_at_;
-  }
-  _impl_.updated_at_ = nullptr;
+  _impl_.created_at_.ClearToEmpty();
+  _impl_.updated_at_.ClearToEmpty();
   _impl_.id_ = int64_t{0};
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -242,19 +229,23 @@ const char* User::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         } else
           goto handle_unusual;
         continue;
-      // .google.protobuf.Timestamp created_at = 3;
+      // string created_at = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_created_at(), ptr);
+          auto str = _internal_mutable_created_at();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "user.User.created_at"));
         } else
           goto handle_unusual;
         continue;
-      // .google.protobuf.Timestamp updated_at = 4;
+      // string updated_at = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_updated_at(), ptr);
+          auto str = _internal_mutable_updated_at();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "user.User.updated_at"));
         } else
           goto handle_unusual;
         continue;
@@ -303,18 +294,24 @@ uint8_t* User::_InternalSerialize(
         2, this->_internal_name(), target);
   }
 
-  // .google.protobuf.Timestamp created_at = 3;
-  if (this->_internal_has_created_at()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::created_at(this),
-        _Internal::created_at(this).GetCachedSize(), target, stream);
+  // string created_at = 3;
+  if (!this->_internal_created_at().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_created_at().data(), static_cast<int>(this->_internal_created_at().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "user.User.created_at");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_created_at(), target);
   }
 
-  // .google.protobuf.Timestamp updated_at = 4;
-  if (this->_internal_has_updated_at()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::updated_at(this),
-        _Internal::updated_at(this).GetCachedSize(), target, stream);
+  // string updated_at = 4;
+  if (!this->_internal_updated_at().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_updated_at().data(), static_cast<int>(this->_internal_updated_at().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "user.User.updated_at");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_updated_at(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -340,18 +337,18 @@ size_t User::ByteSizeLong() const {
         this->_internal_name());
   }
 
-  // .google.protobuf.Timestamp created_at = 3;
-  if (this->_internal_has_created_at()) {
+  // string created_at = 3;
+  if (!this->_internal_created_at().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.created_at_);
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_created_at());
   }
 
-  // .google.protobuf.Timestamp updated_at = 4;
-  if (this->_internal_has_updated_at()) {
+  // string updated_at = 4;
+  if (!this->_internal_updated_at().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.updated_at_);
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_updated_at());
   }
 
   // int64 id = 1;
@@ -380,13 +377,11 @@ void User::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_
   if (!from._internal_name().empty()) {
     _this->_internal_set_name(from._internal_name());
   }
-  if (from._internal_has_created_at()) {
-    _this->_internal_mutable_created_at()->::PROTOBUF_NAMESPACE_ID::Timestamp::MergeFrom(
-        from._internal_created_at());
+  if (!from._internal_created_at().empty()) {
+    _this->_internal_set_created_at(from._internal_created_at());
   }
-  if (from._internal_has_updated_at()) {
-    _this->_internal_mutable_updated_at()->::PROTOBUF_NAMESPACE_ID::Timestamp::MergeFrom(
-        from._internal_updated_at());
+  if (!from._internal_updated_at().empty()) {
+    _this->_internal_set_updated_at(from._internal_updated_at());
   }
   if (from._internal_id() != 0) {
     _this->_internal_set_id(from._internal_id());
@@ -414,12 +409,15 @@ void User::InternalSwap(User* other) {
       &_impl_.name_, lhs_arena,
       &other->_impl_.name_, rhs_arena
   );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(User, _impl_.id_)
-      + sizeof(User::_impl_.id_)
-      - PROTOBUF_FIELD_OFFSET(User, _impl_.created_at_)>(
-          reinterpret_cast<char*>(&_impl_.created_at_),
-          reinterpret_cast<char*>(&other->_impl_.created_at_));
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.created_at_, lhs_arena,
+      &other->_impl_.created_at_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.updated_at_, lhs_arena,
+      &other->_impl_.updated_at_, rhs_arena
+  );
+  swap(_impl_.id_, other->_impl_.id_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata User::GetMetadata() const {
