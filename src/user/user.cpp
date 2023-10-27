@@ -274,7 +274,7 @@ void RunPublisher() {
 }
 
 void RunSubscriber() {
-    subscriber.connect("tcp://" + subsURL +":" + subsPort);
+    subscriber.connect("tcp://" + subsURL + ":" + subsPort);
     subscriber.set(zmq::sockopt::subscribe, "Hello");
 
     if (subscriber.connected()) {
@@ -288,8 +288,12 @@ void RunSubscriber() {
             continue;
         }
 
-        messageQueue.push(recv_msgs[1].to_string());
-        std::cout << "Subscriber received: " << recv_msgs[1].to_string() << std::endl;
+        if (recv_msgs.size() > 0) {
+            std::string message = recv_msgs[1].to_string();
+            messageQueue.push(message);
+            std::cout << "MessageQueue pushed: " << message << std::endl;
+            std::cout << "Subscriber received: " << recv_msgs[1].to_string() << std::endl;
+        }
 
         rapidjson::Document data;
         std::string recvMessage = recv_msgs[1].to_string();
@@ -315,22 +319,20 @@ void RunSubscriber() {
             }
         }
 
-        if (pubsPort != subsPort && appURL != subsURL) {
-            pqxx::work txn(c);
+        pqxx::work txn(c);
 
-            if (data["method"].GetString() == "POST") {
-                txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
-                         std::to_string(user.id()) + ", '" + user.name() + "', '" +
-                         user.created_at() + "', '" + user.updated_at() + "')");
-            } else if (data["method"].GetString() == "PUT") {
-                txn.exec("UPDATE users SET name='" + user.name() +
-                         "', updated_at= NOW() WHERE id = " + to_string(user.id()));
-            } else if (data["method"].GetString() == "DELETE") {
-                txn.exec("DELETE FROM users WHERE id = " + to_string(user.id()));
-            }
-
-            txn.commit();
+        if (data["method"].GetString() == "POST") {
+            txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
+                     std::to_string(user.id()) + ", '" + user.name() + "', '" + user.created_at() +
+                     "', '" + user.updated_at() + "')");
+        } else if (data["method"].GetString() == "PUT") {
+            txn.exec("UPDATE users SET name='" + user.name() +
+                     "', updated_at= NOW() WHERE id = " + to_string(user.id()));
+        } else if (data["method"].GetString() == "DELETE") {
+            txn.exec("DELETE FROM users WHERE id = " + to_string(user.id()));
         }
+
+        txn.commit();
     }
 }
 
@@ -350,20 +352,29 @@ void RunSSE() {
 
     socket.write_some(buffer(response));
 
+    // while (true) {
+    //     std::mutex mtx;
+    //     std::condition_variable cv;
+
+    //     std::unique_lock<std::mutex> lock(mtx);
+    //     cv.wait(lock, [&] { return !messageQueue.empty(); });
+
+    //     std::string message = messageQueue.front();
+
+    //     message = "data: " + message + "\r\n\r\n";
+    //     socket.write_some(buffer(message));
+    //     std::cout << "Broadcasted Message in SSE: " << message << std::endl;
+
+    //     messageQueue.pop();
+    // }
     while (true) {
-        std::mutex mtx;
-        std::condition_variable cv;
-
-        std::unique_lock<std::mutex> lock(mtx);
-        cv.wait(lock, [&] { return !messageQueue.empty(); });
-
-        std::string message = messageQueue.front();
-        messageQueue.pop();
-
-        message = "data: " + message + "\r\n\r\n";
-        socket.write_some(buffer(message));
-        std::cout << "Subscriber: " << message << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        if (!messageQueue.empty()) {
+            std::string message = messageQueue.front();
+            messageQueue.pop();
+            std::string messageToBroadcast = "data: " + message + "\r\n\r\n";
+            socket.write_some(buffer(messageToBroadcast));
+            std::cout << "Broadcasted Message in SSE: " << message << std::endl;
+        }
     }
 }
 
