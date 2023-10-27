@@ -35,7 +35,7 @@ zmq::socket_t publisher{context, zmq::socket_type::pub};
 zmq::socket_t subscriber{context, zmq::socket_type::sub};
 std::string message;
 
-pqxx::connection c("postgresql://postgres:postgres@localhost:5432/cpp-grpc-crud");
+pqxx::connection c("postgresql://postgres:postgres@localhost:5433/cpp-grpc-crud");
 
 class UserServiceImpl final : public UserService::Service
 {
@@ -78,8 +78,6 @@ public:
             getUser.set_created_at(row["created_at"].c_str());
             getUser.set_updated_at(row["updated_at"].c_str());
 
-            users_[row["id"].as<int64_t>()] = newUser;
-
             std::string json_response = json_data.dump();
 
             publisher.send(zmq::str_buffer("Hello"), zmq::send_flags::sndmore);
@@ -120,8 +118,6 @@ public:
             user.set_name(row["name"].c_str());
             user.set_created_at(row["created_at"].c_str());
             user.set_updated_at(row["updated_at"].c_str());
-
-            users_[row["id"].as<int64_t>()] = user;
 
             std::string json_response = json_data.dump();
 
@@ -169,21 +165,31 @@ public:
 
     Status ListUsers(ServerContext *context, const Empty *request, grpc::ServerWriter<User> *writer) override
     {
-        for (const auto &pair : users_)
+        pqxx::work txn(c);
+
+        pqxx::result res = txn.exec("SELECT * FROM users");
+
+        txn.commit();
+
+        if (res.empty())
         {
-            writer->Write(pair.second);
+            return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
+
+        for (auto row : res)
+        {
+            User user;
+
+            user.set_id(row["id"].as<int64_t>());
+            user.set_name(row["name"].c_str());
+            user.set_created_at(row["created_at"].c_str());
+            user.set_updated_at(row["updated_at"].c_str());
+
+            writer->Write(user);
+        }
+
         return Status::OK;
     }
-
-private:
-    int64_t GenerateNewUserId()
-    {
-        static int64_t nextId = 1;
-        return nextId++;
-    }
-
-    std::unordered_map<int64_t, User> users_;
 };
 
 void StartDB()
@@ -206,7 +212,8 @@ void StartDB()
 
 void RunPublisher()
 {
-    publisher.bind("tcp://localhost:5053");
+    // publisher.bind("tcp://localhost:5053");
+    publisher.bind("tcp://localhost:5003");
 }
 
 void RunSSESubscriber()
