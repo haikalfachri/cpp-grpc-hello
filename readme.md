@@ -65,3 +65,13 @@
     ```
     vcpkg install cppzmq
     ```
+    
+7. Install Nlohmann-JSON
+    ```
+    vcpkg install nlohmann-json
+    ```
+
+8. Install PQXX for Postgresql Database
+    ```
+    vcpkg install libpqxx
+    ```
