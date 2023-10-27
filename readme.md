@@ -54,11 +54,18 @@
     #endif
     ```
 
-5. Generate all required cpp file from .proto
+5. Generate all required cpp file from .proto 
+
+    go to user directory
 
     ```
-    protoc -I ./ --grpc_out=src --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe helloworld.proto
-    protoc -I ./ --cpp_out=src helloworld.proto
+    cd src/user
+    ```
+
+    generate cpp file from .proto
+    ```
+    protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe user.proto
+    protoc -I ./ --cpp_out=. user.proto
     ```
 6. Install ZeroMQ with vcpkg
 
