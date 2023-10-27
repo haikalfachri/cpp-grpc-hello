@@ -56,12 +56,12 @@ class UserService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::user::User>> PrepareAsyncUpdateUser(::grpc::ClientContext* context, const ::user::User& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::user::User>>(PrepareAsyncUpdateUserRaw(context, request, cq));
     }
-    virtual ::grpc::Status DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::google::protobuf::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> AsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(AsyncDeleteUserRaw(context, request, cq));
+    virtual ::grpc::Status DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::user::User* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::user::User>> AsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::user::User>>(AsyncDeleteUserRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> PrepareAsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(PrepareAsyncDeleteUserRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::user::User>> PrepareAsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::user::User>>(PrepareAsyncDeleteUserRaw(context, request, cq));
     }
     std::unique_ptr< ::grpc::ClientReaderInterface< ::user::User>> ListUsers(::grpc::ClientContext* context, const ::google::protobuf::Empty& request) {
       return std::unique_ptr< ::grpc::ClientReaderInterface< ::user::User>>(ListUsersRaw(context, request));
@@ -81,8 +81,8 @@ class UserService final {
       virtual void ReadUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void UpdateUser(::grpc::ClientContext* context, const ::user::User* request, ::user::User* response, std::function<void(::grpc::Status)>) = 0;
       virtual void UpdateUser(::grpc::ClientContext* context, const ::user::User* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void ListUsers(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::grpc::ClientReadReactor< ::user::User>* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
@@ -95,8 +95,8 @@ class UserService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::user::User>* PrepareAsyncReadUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::user::User>* AsyncUpdateUserRaw(::grpc::ClientContext* context, const ::user::User& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::user::User>* PrepareAsyncUpdateUserRaw(::grpc::ClientContext* context, const ::user::User& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* AsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* PrepareAsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::user::User>* AsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::user::User>* PrepareAsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientReaderInterface< ::user::User>* ListUsersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::user::User>* AsyncListUsersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::user::User>* PrepareAsyncListUsersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
@@ -125,12 +125,12 @@ class UserService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::user::User>> PrepareAsyncUpdateUser(::grpc::ClientContext* context, const ::user::User& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::user::User>>(PrepareAsyncUpdateUserRaw(context, request, cq));
     }
-    ::grpc::Status DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::google::protobuf::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> AsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(AsyncDeleteUserRaw(context, request, cq));
+    ::grpc::Status DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::user::User* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::user::User>> AsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::user::User>>(AsyncDeleteUserRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> PrepareAsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(PrepareAsyncDeleteUserRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::user::User>> PrepareAsyncDeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::user::User>>(PrepareAsyncDeleteUserRaw(context, request, cq));
     }
     std::unique_ptr< ::grpc::ClientReader< ::user::User>> ListUsers(::grpc::ClientContext* context, const ::google::protobuf::Empty& request) {
       return std::unique_ptr< ::grpc::ClientReader< ::user::User>>(ListUsersRaw(context, request));
@@ -150,8 +150,8 @@ class UserService final {
       void ReadUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) override;
       void UpdateUser(::grpc::ClientContext* context, const ::user::User* request, ::user::User* response, std::function<void(::grpc::Status)>) override;
       void UpdateUser(::grpc::ClientContext* context, const ::user::User* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) override;
-      void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, std::function<void(::grpc::Status)>) override;
+      void DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) override;
       void ListUsers(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::grpc::ClientReadReactor< ::user::User>* reactor) override;
      private:
       friend class Stub;
@@ -170,8 +170,8 @@ class UserService final {
     ::grpc::ClientAsyncResponseReader< ::user::User>* PrepareAsyncReadUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::user::User>* AsyncUpdateUserRaw(::grpc::ClientContext* context, const ::user::User& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::user::User>* PrepareAsyncUpdateUserRaw(::grpc::ClientContext* context, const ::user::User& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* AsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* PrepareAsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::user::User>* AsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::user::User>* PrepareAsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientReader< ::user::User>* ListUsersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request) override;
     ::grpc::ClientAsyncReader< ::user::User>* AsyncListUsersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReader< ::user::User>* PrepareAsyncListUsersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
@@ -190,7 +190,7 @@ class UserService final {
     virtual ::grpc::Status CreateUser(::grpc::ServerContext* context, const ::user::User* request, ::user::User* response);
     virtual ::grpc::Status ReadUser(::grpc::ServerContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response);
     virtual ::grpc::Status UpdateUser(::grpc::ServerContext* context, const ::user::User* request, ::user::User* response);
-    virtual ::grpc::Status DeleteUser(::grpc::ServerContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response);
+    virtual ::grpc::Status DeleteUser(::grpc::ServerContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response);
     virtual ::grpc::Status ListUsers(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::grpc::ServerWriter< ::user::User>* writer);
   };
   template <class BaseClass>
@@ -265,11 +265,11 @@ class UserService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestDeleteUser(::grpc::ServerContext* context, ::google::protobuf::Int64Value* request, ::grpc::ServerAsyncResponseWriter< ::google::protobuf::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestDeleteUser(::grpc::ServerContext* context, ::google::protobuf::Int64Value* request, ::grpc::ServerAsyncResponseWriter< ::user::User>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -382,25 +382,25 @@ class UserService final {
    public:
     WithCallbackMethod_DeleteUser() {
       ::grpc::Service::MarkMethodCallback(3,
-          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Int64Value, ::google::protobuf::Empty>(
+          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Int64Value, ::user::User>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response) { return this->DeleteUser(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response) { return this->DeleteUser(context, request, response); }));}
     void SetMessageAllocatorFor_DeleteUser(
-        ::grpc::MessageAllocator< ::google::protobuf::Int64Value, ::google::protobuf::Empty>* allocator) {
+        ::grpc::MessageAllocator< ::google::protobuf::Int64Value, ::user::User>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Int64Value, ::google::protobuf::Empty>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Int64Value, ::user::User>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_DeleteUser() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* DeleteUser(
-      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_ListUsers : public BaseClass {
@@ -489,7 +489,7 @@ class UserService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -583,7 +583,7 @@ class UserService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -692,7 +692,7 @@ class UserService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -810,10 +810,10 @@ class UserService final {
     WithStreamedUnaryMethod_DeleteUser() {
       ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::google::protobuf::Int64Value, ::google::protobuf::Empty>(
+          ::google::protobuf::Int64Value, ::user::User>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::google::protobuf::Int64Value, ::google::protobuf::Empty>* streamer) {
+                     ::google::protobuf::Int64Value, ::user::User>* streamer) {
                        return this->StreamedDeleteUser(context,
                          streamer);
                   }));
@@ -822,12 +822,12 @@ class UserService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status DeleteUser(::grpc::ServerContext* /*context*/, const ::google::protobuf::Int64Value* /*request*/, ::user::User* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedDeleteUser(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Int64Value,::google::protobuf::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedDeleteUser(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Int64Value,::user::User>* server_unary_streamer) = 0;
   };
   typedef WithStreamedUnaryMethod_CreateUser<WithStreamedUnaryMethod_ReadUser<WithStreamedUnaryMethod_UpdateUser<WithStreamedUnaryMethod_DeleteUser<Service > > > > StreamedUnaryService;
   template <class BaseClass>

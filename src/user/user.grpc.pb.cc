@@ -112,23 +112,23 @@ void UserService::Stub::async::UpdateUser(::grpc::ClientContext* context, const 
   return result;
 }
 
-::grpc::Status UserService::Stub::DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::google::protobuf::Empty* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Int64Value, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_DeleteUser_, context, request, response);
+::grpc::Status UserService::Stub::DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::user::User* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Int64Value, ::user::User, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_DeleteUser_, context, request, response);
 }
 
-void UserService::Stub::async::DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Int64Value, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_DeleteUser_, context, request, response, std::move(f));
+void UserService::Stub::async::DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Int64Value, ::user::User, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_DeleteUser_, context, request, response, std::move(f));
 }
 
-void UserService::Stub::async::DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+void UserService::Stub::async::DeleteUser(::grpc::ClientContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_DeleteUser_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* UserService::Stub::PrepareAsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::google::protobuf::Empty, ::google::protobuf::Int64Value, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_DeleteUser_, context, request);
+::grpc::ClientAsyncResponseReader< ::user::User>* UserService::Stub::PrepareAsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::user::User, ::google::protobuf::Int64Value, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_DeleteUser_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* UserService::Stub::AsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::user::User>* UserService::Stub::AsyncDeleteUserRaw(::grpc::ClientContext* context, const ::google::protobuf::Int64Value& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncDeleteUserRaw(context, request, cq);
   result->StartCall();
@@ -185,11 +185,11 @@ UserService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       UserService_method_names[3],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< UserService::Service, ::google::protobuf::Int64Value, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< UserService::Service, ::google::protobuf::Int64Value, ::user::User, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](UserService::Service* service,
              ::grpc::ServerContext* ctx,
              const ::google::protobuf::Int64Value* req,
-             ::google::protobuf::Empty* resp) {
+             ::user::User* resp) {
                return service->DeleteUser(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
@@ -228,7 +228,7 @@ UserService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status UserService::Service::DeleteUser(::grpc::ServerContext* context, const ::google::protobuf::Int64Value* request, ::google::protobuf::Empty* response) {
+::grpc::Status UserService::Service::DeleteUser(::grpc::ServerContext* context, const ::google::protobuf::Int64Value* request, ::user::User* response) {
   (void) context;
   (void) request;
   (void) response;

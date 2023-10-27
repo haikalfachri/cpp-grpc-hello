@@ -66,14 +66,14 @@ const char descriptor_table_protodef_user_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "\n\nuser.proto\022\004user\032\036google/protobuf/wrap"
   "pers.proto\032\033google/protobuf/empty.proto\""
   "H\n\004User\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\022\022\n\ncre"
-  "ated_at\030\003 \001(\t\022\022\n\nupdated_at\030\004 \001(\t2\204\002\n\013Us"
+  "ated_at\030\003 \001(\t\022\022\n\nupdated_at\030\004 \001(\t2\370\001\n\013Us"
   "erService\022$\n\nCreateUser\022\n.user.User\032\n.us"
   "er.User\0223\n\010ReadUser\022\033.google.protobuf.In"
   "t64Value\032\n.user.User\022$\n\nUpdateUser\022\n.use"
-  "r.User\032\n.user.User\022A\n\nDeleteUser\022\033.googl"
-  "e.protobuf.Int64Value\032\026.google.protobuf."
-  "Empty\0221\n\tListUsers\022\026.google.protobuf.Emp"
-  "ty\032\n.user.User0\001b\006proto3"
+  "r.User\032\n.user.User\0225\n\nDeleteUser\022\033.googl"
+  "e.protobuf.Int64Value\032\n.user.User\0221\n\tLis"
+  "tUsers\022\026.google.protobuf.Empty\032\n.user.Us"
+  "er0\001b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_user_2eproto_deps[2] = {
   &::descriptor_table_google_2fprotobuf_2fempty_2eproto,
@@ -81,7 +81,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_user_2eproto_deps[2
 };
 static ::_pbi::once_flag descriptor_table_user_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_user_2eproto = {
-    false, false, 424, descriptor_table_protodef_user_2eproto,
+    false, false, 412, descriptor_table_protodef_user_2eproto,
     "user.proto",
     &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_deps, 2, 1,
     schemas, file_default_instances, TableStruct_user_2eproto::offsets,
