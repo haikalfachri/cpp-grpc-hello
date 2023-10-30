@@ -47,7 +47,7 @@ string appURL = "localhost";
 string pubsURL = "*";
 string subsURL = "localhost";
 string pubsPort = "5002";
-string subsPort = "5002";
+string subsPort = "5052";
 string ssePort = "5001";
 string appPort = "5000";
 pqxx::connection c("postgresql://postgres:postgres@localhost:5433/cpp-grpc-crud");
@@ -321,14 +321,19 @@ void RunSubscriber() {
 
         pqxx::work txn(c);
 
-        if (data["method"].GetString() == "POST") {
+        std::string method = data["method"].GetString();
+        std::string postMethod = "POST";
+        std::string putMethod = "PUT";
+        std::string deleteMethod = "DELETE";
+
+        if (method == postMethod) {
             txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
                      std::to_string(user.id()) + ", '" + user.name() + "', '" + user.created_at() +
                      "', '" + user.updated_at() + "')");
-        } else if (data["method"].GetString() == "PUT") {
+        } else if (method == putMethod) {
             txn.exec("UPDATE users SET name='" + user.name() +
                      "', updated_at= NOW() WHERE id = " + to_string(user.id()));
-        } else if (data["method"].GetString() == "DELETE") {
+        } else if (method == deleteMethod) {
             txn.exec("DELETE FROM users WHERE id = " + to_string(user.id()));
         }
 
