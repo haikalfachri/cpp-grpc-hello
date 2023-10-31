@@ -1,9 +1,11 @@
-## Example GRPC using C++
+# Example GRPC using C++
 
-### Important notes
+## Important notes
 
-1. Install cmake via installer from https://cmake.org/download/ and add /path/to/CMake/bin to your path environment
+1. Install cmake via installer from https://cmake.org/download/ and add  ```/path/to/CMake/bin ``` to your path environment
+   
 2. Install vcpkg via clone, https://vcpkg.io/en/getting-started
+   
 3. Open cmd in vcpkg folder, install protobuf, grpc, zlib
 
     ```
@@ -28,16 +30,16 @@
     
     Add "path/to/vcpkg/installed/x64-windows/include" to .vscode/c_cpp_properties.json inside includePath
 
-4. Install protobuf locally via download and extract from https://github.com/protocolbuffers/protobuf/releases and add path/to/protoc-{VERSION}-win64/bin to your path environment 
+4. Install protobuf locally via download and extract from https://github.com/protocolbuffers/protobuf/releases and add  ```path/to/protoc-{VERSION}-win64/bin``` to your path environment 
 
-    **IMPORTANT**
+    >**Important**
     
-    Make sure that protobuf version on /path/to/vcpkg/packages/protobuf_x64-windows/include/google/protobuf/stubs
+    Make sure that protobuf version on  ```/path/to/vcpkg/packages/protobuf_x64-windows/include/google/protobuf/stubs```
     
     ```
     #define GOOGLE_PROTOBUF_VERSION 3021012
     ```
-    
+
     is the same version on .pb.h to prevent error when build the app
     
     ```
@@ -81,4 +83,3 @@
 8. Install PQXX for Postgresql Database
     ```
     vcpkg install libpqxx
-    ```
