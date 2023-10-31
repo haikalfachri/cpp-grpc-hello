@@ -23,12 +23,12 @@
     ```
     vcpkg integrate install
     ```
-
-    >**Important**
     
-    - Put all ```find_packages``` and ```target_link_libraries``` in CMakeLists.txt
+    **IMPORTANT**
     
-    - Add  ```path/to/vcpkg/installed/x64-windows/include ``` to  ```.vscode/c_cpp_properties.json``` inside "includePath"
+    Put all ```find_packages``` and ```target_link_libraries``` in CMakeLists.txt
+    
+    Add "path/to/vcpkg/installed/x64-windows/include" to .vscode/c_cpp_properties.json inside includePath
 
 4. Install protobuf locally via download and extract from https://github.com/protocolbuffers/protobuf/releases and add  ```path/to/protoc-{VERSION}-win64/bin``` to your path environment 
 
@@ -39,7 +39,7 @@
     ```
     #define GOOGLE_PROTOBUF_VERSION 3021012
     ```
-  
+
     is the same version on .pb.h to prevent error when build the app
     
     ```
@@ -56,12 +56,30 @@
     #endif
     ```
 
-5. Generate all required cpp file from .proto
+5. Generate all required cpp file from .proto 
+
+    go to user directory
 
     ```
-    protoc -I ./ --grpc_out=src --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe helloworld.proto  
+    cd src/user
     ```
-  
+
+    generate cpp file from .proto
     ```
-    protoc -I ./ --cpp_out=src helloworld.proto
+    protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe user.proto
+    protoc -I ./ --cpp_out=. user.proto
     ```
+6. Install ZeroMQ with vcpkg
+
+    ```
+    vcpkg install cppzmq
+    ```
+    
+7. Install Nlohmann-JSON
+    ```
+    vcpkg install nlohmann-json
+    ```
+
+8. Install PQXX for Postgresql Database
+    ```
+    vcpkg install libpqxx
