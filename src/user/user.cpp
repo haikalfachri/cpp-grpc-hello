@@ -43,18 +43,20 @@ zmq::socket_t subscriber{context, zmq::socket_type::sub};
 std::string message;
 std::queue<std::string> messageQueue;
 
-string appURL = "localhost";
+string appURL = "10.42.0.98";
 string pubsURL = "*";
-string subsURL = "localhost";
-string pubsPort = "5002";
-string subsPort = "5052";
-string ssePort = "5001";
-string appPort = "5000";
-pqxx::connection c("postgresql://postgres:postgres@localhost:5433/cpp-grpc-crud");
+string subsURL = "10.42.0.43";
+string pubsPort = "5052";
+string subsPort = "5002";
+string ssePort = "5051";
+string appPort = "5050";
+pqxx::connection c("postgresql://postgres:postgres@localhost:5432/cpp-grpc-crud");
 
-class UserServiceImpl final : public UserService::Service {
-  public:
-    Status CreateUser(ServerContext *context, const User *request, User *response) override {
+class UserServiceImpl final : public UserService::Service
+{
+public:
+    Status CreateUser(ServerContext *context, const User *request, User *response) override
+    {
         User newUser;
         newUser.set_name(request->name());
 
@@ -78,7 +80,8 @@ class UserServiceImpl final : public UserService::Service {
 
         txn.commit();
 
-        for (auto row : res) {
+        for (auto row : res)
+        {
             nlohmann::json json_data = {{"method", "POST"},
                                         {"data",
                                          {
@@ -104,7 +107,8 @@ class UserServiceImpl final : public UserService::Service {
         return Status::OK;
     }
 
-    Status ReadUser(ServerContext *context, const Int64Value *request, User *response) override {
+    Status ReadUser(ServerContext *context, const Int64Value *request, User *response) override
+    {
         int64_t userId = request->value();
 
         pqxx::work txn(c);
@@ -113,13 +117,15 @@ class UserServiceImpl final : public UserService::Service {
 
         txn.commit();
 
-        if (res.empty()) {
+        if (res.empty())
+        {
             return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
 
         User user;
 
-        for (auto row : res) {
+        for (auto row : res)
+        {
             nlohmann::json json_data = {{"id", row["id"].as<int64_t>()},
                                         {"name", row["name"].c_str()},
                                         {"created_at", row["created_at"].c_str()},
@@ -136,14 +142,16 @@ class UserServiceImpl final : public UserService::Service {
         return Status::OK;
     }
 
-    Status UpdateUser(ServerContext *context, const User *request, User *response) override {
+    Status UpdateUser(ServerContext *context, const User *request, User *response) override
+    {
         int64_t userId = request->id();
 
         pqxx::work txn(c);
 
         pqxx::result result = txn.exec("SELECT * FROM users WHERE id = " + std::to_string(userId));
 
-        if (result.empty()) {
+        if (result.empty())
+        {
             return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
 
@@ -156,7 +164,8 @@ class UserServiceImpl final : public UserService::Service {
 
         txn.commit();
 
-        for (auto row : res) {
+        for (auto row : res)
+        {
             nlohmann::json json_data = {{"method", "PUT"},
                                         {"data",
                                          {
@@ -182,20 +191,23 @@ class UserServiceImpl final : public UserService::Service {
         return Status::OK;
     }
 
-    Status DeleteUser(ServerContext *context, const Int64Value *request, User *response) override {
+    Status DeleteUser(ServerContext *context, const Int64Value *request, User *response) override
+    {
         int64_t userId = request->value();
 
         pqxx::work txn(c);
 
         pqxx::result res = txn.exec("SELECT * FROM users WHERE id = " + std::to_string(userId));
 
-        if (res.empty()) {
+        if (res.empty())
+        {
             return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
 
         User user;
 
-        for (auto row : res) {
+        for (auto row : res)
+        {
             nlohmann::json json_data = {{"method", "DELETE"},
                                         {"data",
                                          {
@@ -226,18 +238,21 @@ class UserServiceImpl final : public UserService::Service {
     }
 
     Status ListUsers(ServerContext *context, const Empty *request,
-                     grpc::ServerWriter<User> *writer) override {
+                     grpc::ServerWriter<User> *writer) override
+    {
         pqxx::work txn(c);
 
         pqxx::result res = txn.exec("SELECT * FROM users");
 
         txn.commit();
 
-        if (res.empty()) {
+        if (res.empty())
+        {
             return Status(grpc::StatusCode::NOT_FOUND, "User not found");
         }
 
-        for (auto row : res) {
+        for (auto row : res)
+        {
             User user;
 
             user.set_id(row["id"].as<int64_t>());
@@ -252,7 +267,8 @@ class UserServiceImpl final : public UserService::Service {
     }
 };
 
-void StartDB() {
+void StartDB()
+{
     pqxx::work txn{c};
 
     txn.exec(R"(
@@ -269,26 +285,32 @@ void StartDB() {
     txn.commit();
 }
 
-void RunPublisher() {
+void RunPublisher()
+{
     publisher.bind("tcp://" + pubsURL + ":" + pubsPort);
 }
 
-void RunSubscriber() {
+void RunSubscriber()
+{
     subscriber.connect("tcp://" + subsURL + ":" + subsPort);
     subscriber.set(zmq::sockopt::subscribe, "Hello");
 
-    if (subscriber.connected()) {
+    if (subscriber.connected())
+    {
         std::cout << "Subscriber listen!" << std::endl;
     }
 
-    while (true) {
+    while (true)
+    {
         std::vector<zmq::message_t> recv_msgs;
         zmq::recv_result_t result = zmq::recv_multipart(subscriber, std::back_inserter(recv_msgs));
-        if (!(result && "recv failed") || !(*result == 2)) {
+        if (!(result && "recv failed") || !(*result == 2))
+        {
             continue;
         }
 
-        if (recv_msgs.size() > 0) {
+        if (recv_msgs.size() > 0)
+        {
             std::string message = recv_msgs[1].to_string();
             messageQueue.push(message);
             std::cout << "MessageQueue pushed: " << message << std::endl;
@@ -300,21 +322,26 @@ void RunSubscriber() {
         data.Parse(recvMessage.c_str());
 
         User user;
-        if (data.HasMember("data")) {
+        if (data.HasMember("data"))
+        {
             const auto &jsonData = data["data"];
-            if (jsonData.HasMember("id") && jsonData["id"].IsInt64()) {
+            if (jsonData.HasMember("id") && jsonData["id"].IsInt64())
+            {
                 user.set_id(jsonData["id"].GetInt64());
             }
 
-            if (jsonData.HasMember("name") && jsonData["name"].IsString()) {
+            if (jsonData.HasMember("name") && jsonData["name"].IsString())
+            {
                 user.set_name(jsonData["name"].GetString());
             }
 
-            if (jsonData.HasMember("created_at") && jsonData["created_at"].IsString()) {
+            if (jsonData.HasMember("created_at") && jsonData["created_at"].IsString())
+            {
                 user.set_created_at(jsonData["created_at"].GetString());
             }
 
-            if (jsonData.HasMember("updated_at") && jsonData["updated_at"].IsString()) {
+            if (jsonData.HasMember("updated_at") && jsonData["updated_at"].IsString())
+            {
                 user.set_updated_at(jsonData["updated_at"].GetString());
             }
         }
@@ -326,14 +353,19 @@ void RunSubscriber() {
         std::string putMethod = "PUT";
         std::string deleteMethod = "DELETE";
 
-        if (method == postMethod) {
+        if (method == postMethod)
+        {
             txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
                      std::to_string(user.id()) + ", '" + user.name() + "', '" + user.created_at() +
                      "', '" + user.updated_at() + "')");
-        } else if (method == putMethod) {
+        }
+        else if (method == putMethod)
+        {
             txn.exec("UPDATE users SET name='" + user.name() +
                      "', updated_at= NOW() WHERE id = " + to_string(user.id()));
-        } else if (method == deleteMethod) {
+        }
+        else if (method == deleteMethod)
+        {
             txn.exec("DELETE FROM users WHERE id = " + to_string(user.id()));
         }
 
@@ -341,50 +373,46 @@ void RunSubscriber() {
     }
 }
 
-void RunSSE() {
+void RunSSE()
+{
     io_service io;
     tcp::acceptor acceptor(io, tcp::endpoint(tcp::v4(), stoi(ssePort)));
     std::cout << "SSE server is running on " << appURL << ":" << ssePort << std::endl;
 
-    tcp::socket socket(io);
-    acceptor.accept(socket);
+    while (true)
+    {
+        tcp::socket socket(io);
+        acceptor.accept(socket);
 
-    std::string response = "HTTP/1.1 200 OK\r\n";
-    response += "Content-Type: text/event-stream\r\n";
-    response += "Cache-Control: no-cache\r\n";
-    response += "Connection: keep-alive\r\n";
-    response += "\r\n";
+        std::string response = "HTTP/1.1 200 OK\r\n";
+        response += "Content-Type: text/event-stream\r\n";
+        response += "Cache-Control: no-cache\r\n";
+        response += "Connection: keep-alive\r\n";
+        response += "\r\n";
 
-    socket.write_some(buffer(response));
-
-    // while (true) {
-    //     std::mutex mtx;
-    //     std::condition_variable cv;
-
-    //     std::unique_lock<std::mutex> lock(mtx);
-    //     cv.wait(lock, [&] { return !messageQueue.empty(); });
-
-    //     std::string message = messageQueue.front();
-
-    //     message = "data: " + message + "\r\n\r\n";
-    //     socket.write_some(buffer(message));
-    //     std::cout << "Broadcasted Message in SSE: " << message << std::endl;
-
-    //     messageQueue.pop();
-    // }
-    while (true) {
-        if (!messageQueue.empty()) {
-            std::string message = messageQueue.front();
-            messageQueue.pop();
-            std::string messageToBroadcast = "data: " + message + "\r\n\r\n";
-            socket.write_some(buffer(messageToBroadcast));
-            std::cout << "Broadcasted Message in SSE: " << message << std::endl;
+        socket.write_some(buffer(response));
+        while (true)
+        {
+            if (!messageQueue.empty()) {
+                std::string message = messageQueue.front();
+                messageQueue.pop();
+                std::string messageToBroadcast = "data: " + message + "\r\n\r\n";
+                socket.write_some(buffer(messageToBroadcast));
+                std::cout << "Broadcasted Message in SSE: " << message << std::endl;
+            }
+            if (socket.available() == 0)
+            {
+                std::cout << "SSE client disconnected" << std::endl;
+                break;
+            }
         }
     }
 }
 
-void RunServer() {
-    try {
+void RunServer()
+{
+    try
+    {
         std::string server_address(appURL + ":" + appPort);
         UserServiceImpl service;
 
@@ -404,12 +432,15 @@ void RunServer() {
         publisherThread.join();
         subscriberThread.join();
         sseServerThread.join();
-    } catch (const std::exception &e) {
+    }
+    catch (const std::exception &e)
+    {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     RunServer();
     return 0;
 }
