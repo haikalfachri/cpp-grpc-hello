@@ -1,5 +1,4 @@
 #include <grpcpp/grpcpp.h>
-
 #include <boost/asio.hpp>
 #include <chrono>
 #include <condition_variable>
@@ -17,7 +16,6 @@
 #include <unordered_map>
 #include <zmq.hpp>
 #include <zmq_addon.hpp>
-
 #include "rapidjson/document.h"
 #include "user.grpc.pb.h"
 #include "user.pb.h"
@@ -25,10 +23,8 @@
 using namespace std;
 using namespace boost::asio;
 using namespace boost::asio::ip;
-
 using google::protobuf::Empty;
 using google::protobuf::Int64Value;
-
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
@@ -37,21 +33,42 @@ using ip::tcp;
 using user::User;
 using user::UserService;
 
+/* 
+environment variables 
+*/ 
+
+// fill with IP Address of the device or application url
+string appURL = "10.42.0.98"; 
+// fill with  *  to publish for all IP Address
+string pubsURL = "*"; 
+// fill with IP address to subsribe from another publisher from another service
+string subsURL = "10.42.0.43";
+// fill with publisher port
+string pubsPort = "5052"; 
+// fill with port that will be used to receive data (subscriber port)
+string subsPort = "5002"; 
+// fill with port that will be used in Server Sent Event (SSE)
+string ssePort = "5051"; 
+// fill with port that will be used in application
+string appPort = "5050"; 
+
+/* 
+database connection
+"postgresql://username:password@host:port/dbname"
+*/ 
+pqxx::connection c("postgresql://postgres:postgres@localhost:5432/cpp-grpc-crud");
+
+/* 
+global variable 
+*/
 zmq::context_t context{1};
 zmq::socket_t publisher{context, zmq::socket_type::pub};
 zmq::socket_t subscriber{context, zmq::socket_type::sub};
-std::string message;
 std::queue<std::string> messageQueue;
 
-string appURL = "10.42.0.98";
-string pubsURL = "*";
-string subsURL = "10.42.0.43";
-string pubsPort = "5052";
-string subsPort = "5002";
-string ssePort = "5051";
-string appPort = "5050";
-pqxx::connection c("postgresql://postgres:postgres@localhost:5432/cpp-grpc-crud");
-
+/*
+gRPC handler
+*/
 class UserServiceImpl final : public UserService::Service
 {
 public:
@@ -100,6 +117,8 @@ public:
 
             publisher.send(zmq::str_buffer("Hello"), zmq::send_flags::sndmore);
             publisher.send(zmq::buffer(json_response));
+
+            messageQueue.push(json_response);
         }
 
         *response = getUser;
@@ -267,7 +286,10 @@ public:
     }
 };
 
-void StartDB()
+/*
+table creation
+*/
+void CreateTableDB()
 {
     pqxx::work txn{c};
 
@@ -285,11 +307,17 @@ void StartDB()
     txn.commit();
 }
 
+/*
+run publisher method
+*/
 void RunPublisher()
 {
     publisher.bind("tcp://" + pubsURL + ":" + pubsPort);
 }
 
+/*
+run subsriber method
+*/
 void RunSubscriber()
 {
     subscriber.connect("tcp://" + subsURL + ":" + subsPort);
@@ -373,6 +401,9 @@ void RunSubscriber()
     }
 }
 
+/*
+run SSE method
+*/
 void RunSSE()
 {
     io_service io;
@@ -409,6 +440,9 @@ void RunSSE()
     }
 }
 
+/*
+run server or application method
+*/
 void RunServer()
 {
     try
@@ -423,7 +457,7 @@ void RunServer()
         std::unique_ptr<Server> server(builder.BuildAndStart());
         std::cout << "Server listening on " << server_address << std::endl;
 
-        StartDB();
+        CreateTableDB();
         std::thread publisherThread(RunPublisher);
         std::thread subscriberThread(RunSubscriber);
         std::thread sseServerThread(RunSSE);
