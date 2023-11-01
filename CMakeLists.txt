@@ -34,6 +34,9 @@ target_link_libraries(user nlohmann_json::nlohmann_json)
 find_package(libpqxx CONFIG REQUIRED)
 target_link_libraries(user libpqxx::pqxx)
 
+find_package(unofficial-restbed CONFIG REQUIRED)
+target_link_libraries(user unofficial::restbed::restbed)
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
