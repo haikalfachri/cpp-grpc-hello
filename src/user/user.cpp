@@ -33,38 +33,39 @@ using ip::tcp;
 using user::User;
 using user::UserService;
 
-/* 
-environment variables 
-*/ 
+/*
+environment variables
+*/
 
 // fill with IP Address of the device or application url
-string appURL = "10.42.0.98"; 
+string appURL = "localhost";
 // fill with  *  to publish for all IP Address
-string pubsURL = "*"; 
+string pubsURL = "*";
 // fill with IP address to subsribe from another publisher from another service
-string subsURL = "10.42.0.43";
+string subsURL = "localhost";
 // fill with publisher port
-string pubsPort = "5052"; 
+string pubsPort = "5052";
 // fill with port that will be used to receive data (subscriber port)
-string subsPort = "5002"; 
+string subsPort = "5002";
 // fill with port that will be used in Server Sent Event (SSE)
-string ssePort = "5051"; 
+string ssePort = "5051";
 // fill with port that will be used in application
-string appPort = "5050"; 
+string appPort = "5050";
 
-/* 
+/*
 database connection
 "postgresql://username:password@host:port/dbname"
-*/ 
+*/
 pqxx::connection c("postgresql://postgres:postgres@localhost:5432/cpp-grpc-crud");
 
-/* 
-global variable 
+/*
+global variable
 */
 zmq::context_t context{1};
 zmq::socket_t publisher{context, zmq::socket_type::pub};
 zmq::socket_t subscriber{context, zmq::socket_type::sub};
 std::queue<std::string> messageQueue;
+std::string message;
 
 /*
 gRPC handler
@@ -203,6 +204,8 @@ public:
 
             publisher.send(zmq::str_buffer("Hello"), zmq::send_flags::sndmore);
             publisher.send(zmq::buffer(json_response));
+
+            messageQueue.push(json_response);
         }
 
         *response = getUser;
@@ -245,6 +248,8 @@ public:
 
             publisher.send(zmq::str_buffer("Hello"), zmq::send_flags::sndmore);
             publisher.send(zmq::buffer(json_response));
+
+            messageQueue.push(json_response);
         }
 
         txn.exec("DELETE FROM users WHERE id = " + std::to_string(userId));
@@ -339,7 +344,7 @@ void RunSubscriber()
 
         if (recv_msgs.size() > 0)
         {
-            std::string message = recv_msgs[1].to_string();
+            message = recv_msgs[1].to_string();
             messageQueue.push(message);
             std::cout << "MessageQueue pushed: " << message << std::endl;
             std::cout << "Subscriber received: " << recv_msgs[1].to_string() << std::endl;
@@ -410,32 +415,25 @@ void RunSSE()
     tcp::acceptor acceptor(io, tcp::endpoint(tcp::v4(), stoi(ssePort)));
     std::cout << "SSE server is running on " << appURL << ":" << ssePort << std::endl;
 
+    tcp::socket socket(io);
+    acceptor.accept(socket);
+
+    std::string response = "HTTP/1.1 200 OK\r\n";
+    response += "Content-Type: text/event-stream\r\n";
+    response += "Cache-Control: no-cache\r\n";
+    response += "Connection: keep-alive\r\n";
+    response += "\r\n";
+
+    socket.write_some(buffer(response));
     while (true)
     {
-        tcp::socket socket(io);
-        acceptor.accept(socket);
-
-        std::string response = "HTTP/1.1 200 OK\r\n";
-        response += "Content-Type: text/event-stream\r\n";
-        response += "Cache-Control: no-cache\r\n";
-        response += "Connection: keep-alive\r\n";
-        response += "\r\n";
-
-        socket.write_some(buffer(response));
-        while (true)
+        if (!messageQueue.empty())
         {
-            if (!messageQueue.empty()) {
-                std::string message = messageQueue.front();
-                messageQueue.pop();
-                std::string messageToBroadcast = "data: " + message + "\r\n\r\n";
-                socket.write_some(buffer(messageToBroadcast));
-                std::cout << "Broadcasted Message in SSE: " << message << std::endl;
-            }
-            if (socket.available() == 0)
-            {
-                std::cout << "SSE client disconnected" << std::endl;
-                break;
-            }
+            message = messageQueue.front();
+            messageQueue.pop();
+            std::string messageToBroadcast = "data: " + message + "\r\n\r\n";
+            socket.write_some(buffer(messageToBroadcast));
+            std::cout << "Broadcasted Message in SSE: " << message << std::endl;
         }
     }
 }
