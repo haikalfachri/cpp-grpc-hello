@@ -15,27 +15,58 @@ link_directories(
   "C:\\vcpkg\\installed\\x64-windows\\lib"
 )
 
+# file(GLOB_RECURSE sources src/*.cpp src/*.cc src/*.h src/*.hpp)
+
+# add_executable(user src/user/user.cpp src/user/user.pb.cc src/user/user.grpc.pb.cc)
+
+# find_package(gRPC CONFIG REQUIRED)
+# target_link_libraries(user gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
+
+# find_package(protobuf CONFIG REQUIRED)
+# target_link_libraries(user protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
+
+# find_package(cppzmq CONFIG REQUIRED)
+# target_link_libraries(user cppzmq cppzmq-static)
+
+# find_package(nlohmann_json CONFIG REQUIRED)
+# target_link_libraries(user nlohmann_json::nlohmann_json)
+
+# find_package(libpqxx CONFIG REQUIRED)
+# target_link_libraries(user libpqxx::pqxx)
+
+# find_package(unofficial-restbed CONFIG REQUIRED)
+# target_link_libraries(user unofficial::restbed::restbed)
+
+# file(GLOB_RECURSE sources src/*.cpp src/*.cc src/*.h src/*.hpp src/*.c
+#                   src/database/*.cpp src/database/*.h
+#                   src/generated_protos/*.cc src/generated_protos/*.cpp src/generated_protos/*.h src/generated_protos/*.hpp src/generated_protos/*.c
+#                   src/globals/*.h
+#                   src/grpc/*.cpp src/grpc/*.h
+#                   src/sse/*.cpp src/sse/*.h
+#                   src/sse/*.cpp src/sse/*.h
+# )
+
 file(GLOB_RECURSE sources src/*.cpp src/*.cc src/*.h src/*.hpp)
 
-add_executable(user src/user/user.cpp src/user/user.pb.cc src/user/user.grpc.pb.cc)
+add_executable(main ${sources})
 
 find_package(gRPC CONFIG REQUIRED)
-target_link_libraries(user gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
+target_link_libraries(main gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
 
 find_package(protobuf CONFIG REQUIRED)
-target_link_libraries(user protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
+target_link_libraries(main protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
 
 find_package(cppzmq CONFIG REQUIRED)
-target_link_libraries(user cppzmq cppzmq-static)
+target_link_libraries(main cppzmq cppzmq-static)
 
 find_package(nlohmann_json CONFIG REQUIRED)
-target_link_libraries(user nlohmann_json::nlohmann_json)
+target_link_libraries(main nlohmann_json::nlohmann_json)
 
 find_package(libpqxx CONFIG REQUIRED)
-target_link_libraries(user libpqxx::pqxx)
+target_link_libraries(main libpqxx::pqxx)
 
 find_package(unofficial-restbed CONFIG REQUIRED)
-target_link_libraries(user unofficial::restbed::restbed)
+target_link_libraries(main unofficial::restbed::restbed)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
