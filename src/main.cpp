@@ -16,14 +16,11 @@ std::vector<std::string> message_queue;
 
 void RunApp(){
     try {
-        cout << "============ DB Conn & Create Table ===========" << endl;
         database = new Database();
         database->create_table();
         pqxx::connection &db_connection = database->get_connection();
         cout << db_connection.connection_string() << endl;
-        cout << "=================================================" << endl;
 
-        cout << "=================== APP GRPC Server =================" << endl;
         string server_address("localhost:5000");
         UserServiceImpl service;
 
@@ -33,12 +30,7 @@ void RunApp(){
 
         unique_ptr<Server> server(builder.BuildAndStart());
         cout << "Server listening on http://" << server_address << endl;
-        cout << "==================================================" << endl;
         
-        publisher = new Publisher();
-        subscriber = new Subscriber();
-        sse_server = new SSEServer();
-
         thread publisher_thread(ThreadsContainer::publisher_thread);
         thread subscriber_thread(ThreadsContainer::subscriber_thread);
         thread sse_server_thread(ThreadsContainer::sse_server_thread);
@@ -48,6 +40,7 @@ void RunApp(){
         subscriber_thread.join();
         sse_server_thread.join();
 
+        cout << "SSE Server listening on http://localhost:5003" << endl;
     } catch (const exception &e) {
         cerr << "Exception caught: " << e.what() << endl;
     }

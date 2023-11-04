@@ -3,6 +3,7 @@
 #include <vector>
 #include <zmq.hpp>
 #include <zmq_addon.hpp>
+
 #include "iostream"
 
 using namespace std;
@@ -15,7 +16,6 @@ class Publisher {
   public:
     Publisher();
     void publish_message(const std::string &message);
-    void publisher_pubslishing();
 };
 
 class Subscriber {
@@ -25,7 +25,7 @@ class Subscriber {
 
   public:
     Subscriber();
-    std::string receive_message();
+    std::vector<zmq::message_t> receive_message();
     bool is_connected();
     void subscriber_listening();
 };

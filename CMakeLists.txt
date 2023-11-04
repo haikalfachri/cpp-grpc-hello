@@ -9,10 +9,10 @@ include(CTest)
 enable_testing()
 
 include_directories(
-  "C:\\vcpkg\\installed\\x64-windows\\include"
+  "D:\\vcpkg\\installed\\x64-windows\\include"
 )
 link_directories(
-  "C:\\vcpkg\\installed\\x64-windows\\lib"
+  "D:\\vcpkg\\installed\\x64-windows\\lib"
 )
 
 # file(GLOB_RECURSE sources src/*.cpp src/*.cc src/*.h src/*.hpp)
