@@ -12,7 +12,6 @@ Database *database;
 Publisher *publisher;
 Subscriber *subscriber;
 SSEServer *sse_server;
-std::vector<std::string> message_queue;
 EnvReader *env_reader;
 /* End of definition */
 

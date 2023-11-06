@@ -7,8 +7,6 @@
 #include "../zeromq/zeromq_handler.h"
 #include "../env/env_reader.h"
 
-extern std::vector<std::string> message_queue;
-
 extern Database* database;
 extern Publisher* publisher;
 extern Subscriber* subscriber;

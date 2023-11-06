@@ -182,7 +182,7 @@ grpc::Status UserServiceImpl::ListUsers(grpc::ServerContext* context, const Empt
 
     for (auto row : res) {
         User user;
-
+        
         user.set_id(row["id"].as<int64_t>());
         user.set_name(row["name"].c_str());
         user.set_created_at(row["created_at"].c_str());
