@@ -89,6 +89,11 @@
     ```
     vcpkg install libpqxx
     ```
+
+9. Install restbed for SSE server
+    ```
+    vcpkg install restbed
+    ```
     
-9. Adjust environment in .env
+10. Adjust environment in .env
 
