@@ -9,30 +9,36 @@ include(CTest)
 enable_testing()
 
 include_directories(
-  "C:\\vcpkg\\installed\\x64-windows\\include"
+  "D:\\vcpkg\\installed\\x64-windows\\include"
 )
 link_directories(
-  "C:\\vcpkg\\installed\\x64-windows\\lib"
+  "D:\\vcpkg\\installed\\x64-windows\\lib"
 )
 
 file(GLOB_RECURSE sources src/*.cpp src/*.cc src/*.h src/*.hpp)
 
-add_executable(user src/user/user.cpp src/user/user.pb.cc src/user/user.grpc.pb.cc)
+add_executable(main ${sources})
 
 find_package(gRPC CONFIG REQUIRED)
-target_link_libraries(user gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
+target_link_libraries(main gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
 
 find_package(protobuf CONFIG REQUIRED)
-target_link_libraries(user protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
+target_link_libraries(main protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
 
 find_package(cppzmq CONFIG REQUIRED)
-target_link_libraries(user cppzmq cppzmq-static)
+target_link_libraries(main cppzmq cppzmq-static)
 
 find_package(nlohmann_json CONFIG REQUIRED)
-target_link_libraries(user nlohmann_json::nlohmann_json)
+target_link_libraries(main nlohmann_json::nlohmann_json)
+
+find_package(RapidJSON CONFIG REQUIRED)
+target_link_libraries(main rapidjson)
 
 find_package(libpqxx CONFIG REQUIRED)
-target_link_libraries(user libpqxx::pqxx)
+target_link_libraries(main libpqxx::pqxx)
+
+find_package(unofficial-restbed CONFIG REQUIRED)
+target_link_libraries(main unofficial::restbed::restbed)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
