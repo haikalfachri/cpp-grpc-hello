@@ -15,10 +15,10 @@ using namespace std::chrono;
 class SSEServer {
   public:
     void start_sse();
+    void event_stream_handler_ex(string message);
 
   private:
     void register_event_source_handler(const std::shared_ptr<Session> session);
-    void event_stream_handler();
 
     std::vector<std::shared_ptr<Session>> sessions;
 };

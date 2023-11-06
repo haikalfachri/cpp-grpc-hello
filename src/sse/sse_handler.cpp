@@ -37,6 +37,23 @@ void SSEServer::event_stream_handler() {
     }
 }
 
+void SSEServer::event_stream_handler_ex(string message) {
+    try {
+        sessions.erase(
+            std::remove_if(sessions.begin(), sessions.end(),
+                           [](const std::shared_ptr<Session>& a) { return a->is_closed(); }),
+            sessions.end());
+
+        for (const auto& session : sessions) {
+            const auto message_to_broadcast = "data: " + message + "\n\n";
+            session->yield(message_to_broadcast);
+            std::cout << "Broadcasted Message in SSE: " << message_to_broadcast << std::endl;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+}
+
 void SSEServer::start_sse() {
     auto resource = std::make_shared<Resource>();
     resource->set_path("/stream");
@@ -49,7 +66,5 @@ void SSEServer::start_sse() {
 
     auto service = std::make_shared<Service>();
     service->publish(resource);
-    service->schedule(std::bind(&SSEServer::event_stream_handler, this),
-                      std::chrono::milliseconds(1000));
     service->start(settings);
 }
