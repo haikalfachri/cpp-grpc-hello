@@ -14,29 +14,6 @@ void SSEServer::register_event_source_handler(const std::shared_ptr<Session> ses
     });
 }
 
-void SSEServer::event_stream_handler() {
-    try {
-        sessions.erase(
-            std::remove_if(sessions.begin(), sessions.end(),
-                           [](const std::shared_ptr<Session>& a) { return a->is_closed(); }),
-            sessions.end());
-
-        for (const auto& session : sessions) {
-            if (!message_queue.empty()) {
-                const auto message = "data: " + message_queue.front() + "\n\n";
-                session->yield(message);
-                std::cout << "Broadcasted Message in SSE: " << message << std::endl;
-            }
-        }
-
-        if (!message_queue.empty()) {
-            message_queue.pop_back();
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-}
-
 void SSEServer::event_stream_handler_ex(string message) {
     try {
         sessions.erase(

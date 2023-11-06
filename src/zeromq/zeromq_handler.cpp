@@ -88,8 +88,8 @@ void Subscriber::subscriber_listening() {
             std::string deleteMethod = "DELETE";
 
             if (method == postMethod) {
-                txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
-                         std::to_string(user.id()) + ", '" + user.name() + "', '" +
+                txn.exec("INSERT INTO users (name, created_at, updated_at) VALUES ('" +
+                         user.name() + "', '" +
                          user.created_at() + "', '" + user.updated_at() + "')");
             } else if (method == putMethod) {
                 txn.exec("UPDATE users SET name='" + user.name() +
@@ -99,6 +99,6 @@ void Subscriber::subscriber_listening() {
             }
 
             txn.commit();
-        }
+        // }
     }
 }

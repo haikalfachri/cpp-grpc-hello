@@ -37,7 +37,7 @@ void RunApp() {
 
         unique_ptr<Server> server(builder.BuildAndStart());
         cout << "Server listening on http://" << server_address << endl;
-        cout << "SSE Server listening on http://" + env_reader->get("SSE_SERVER_URL") + ":" + env_reader->get("SSE_SERVER_PORT") << endl;
+        cout << "SSE Server listening on http://" + env_reader->get("APP_URL") + ":" + env_reader->get("SSE_SERVER_PORT") << endl;
 
         thread publisher_thread(ThreadsContainer::publisher_thread);
         thread subscriber_thread(ThreadsContainer::subscriber_thread);
