@@ -24,11 +24,11 @@
     vcpkg integrate install
     ```
     
-    **IMPORTANT**
+    >**IMPORTANT**
     
     Put all ```find_packages``` and ```target_link_libraries``` in CMakeLists.txt
     
-    Add "path/to/vcpkg/installed/x64-windows/include" to .vscode/c_cpp_properties.json inside includePath
+    Add ```"path/to/vcpkg/installed/x64-windows/include"``` to ```.vscode/c_cpp_properties.json``` inside includePath
 
 4. Install protobuf locally via download and extract from https://github.com/protocolbuffers/protobuf/releases and add  ```path/to/protoc-{VERSION}-win64/bin``` to your path environment 
 
@@ -58,16 +58,16 @@
 
 5. Generate all required cpp file from .proto 
 
-    go to user directory
+    go to ```protos``` directory
 
     ```
-    cd src/user
+    cd src/protos
     ```
 
     generate cpp file from .proto
     ```
-    protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe user.proto
-    protoc -I ./ --cpp_out=. user.proto
+    protoc -I ./ --grpc_out=../generated_protos --plugin=protoc-gen-grpc=/path/to/vcpkg/packages/grpc_x64-windows/tools/grpc/grpc_cpp_plugin.exe user.proto
+    protoc -I ./ --cpp_out=../generated_protos user.proto
     ```
 6. Install ZeroMQ with vcpkg
 
@@ -75,11 +75,20 @@
     vcpkg install cppzmq
     ```
     
-7. Install Nlohmann-JSON
+7. Install Nlohmann-JSON & Rapid-JSON
+
     ```
     vcpkg install nlohmann-json
+    ```
+
+    ```
+    vcpkg install rapidjson
     ```
 
 8. Install PQXX for Postgresql Database
     ```
     vcpkg install libpqxx
+    ```
+    
+9. Adjust environment in .env
+

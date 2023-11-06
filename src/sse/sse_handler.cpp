@@ -44,7 +44,8 @@ void SSEServer::start_sse() {
         "GET", std::bind(&SSEServer::register_event_source_handler, this, std::placeholders::_1));
 
     auto settings = std::make_shared<Settings>();
-    settings->set_port(5003);
+    auto sse_port = stoi(env_reader->get("SSE_SERVER_PORT"));
+    settings->set_port(sse_port);
 
     auto service = std::make_shared<Service>();
     service->publish(resource);

@@ -1,11 +1,14 @@
 #include "database.h"
 
-Database::Database() : db_connection("host=localhost port=5432 dbname=cpp-grpc-crud user=postgres password=postgres") {
-    std::string url = "host=localhost port=5432 dbname=cpp-grpc-crud user=postgres password=postgres";
-    this->db_connection = pqxx::connection(url);
+#include "../globals/globals.h"
+
+Database::Database()
+    : db_connection("host=" + env_reader->get("DB_HOST") + " port=" + env_reader->get("DB_PORT") +
+                    " dbname=" + env_reader->get("DB_NAME") + " user=" +
+                    env_reader->get("DB_USER") + " password=" + env_reader->get("DB_PASSWORD")) {
 }
 
-pqxx::connection& Database::get_connection() {
+pqxx::connection &Database::get_connection() {
     return this->db_connection;
 }
 

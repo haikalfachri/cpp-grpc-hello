@@ -1,9 +1,13 @@
 #include "zeromq_handler.h"
-#include "../grpc/user_grpc_handler.h"
+
 #include "../globals/globals.h"
+#include "../grpc/user_grpc_handler.h"
 
 Publisher::Publisher() : context(1), publisher(context, ZMQ_PUB) {
-    publisher.bind("tcp://*:5002");
+    string pub_url = env_reader->get("ZMQ_PUB_URL");
+    string pub_port = env_reader->get("ZMQ_PUB_PORT");
+    string pub_address = pub_url + ":" + pub_port;
+    publisher.bind("tcp://" + pub_address);
 }
 
 void Publisher::publish_message(const std::string &message) {
@@ -12,7 +16,10 @@ void Publisher::publish_message(const std::string &message) {
 }
 
 Subscriber::Subscriber() : context(1), subscriber(context, ZMQ_SUB) {
-    subscriber.connect("tcp://localhost:5002");
+    string sub_url = env_reader->get("ZMQ_SUB_URL");
+    string sub_port = env_reader->get("ZMQ_SUB_PORT");
+    string sub_address = sub_url + ":" + sub_port;
+    subscriber.connect("tcp://" + sub_address);
     subscriber.set(zmq::sockopt::subscribe, "user-topic");
 }
 
@@ -64,25 +71,34 @@ void Subscriber::subscriber_listening() {
             }
         }
 
-        // pqxx::work txn(database->get_connection());
+        string sub_url = env_reader->get("ZMQ_SUB_URL");
+        string sub_port = env_reader->get("ZMQ_SUB_PORT");
+        string sub_address = sub_url + ":" + sub_port;
 
-        // std::string method = data["method"].GetString();
-        // std::string postMethod = "POST";
-        // std::string putMethod = "PUT";
-        // std::string deleteMethod = "DELETE";
+        string pub_url = env_reader->get("ZMQ_PUB_URL");
+        string pub_port = env_reader->get("ZMQ_PUB_PORT");
+        string pub_address = pub_url + ":" + pub_port;
 
-        // if (method == postMethod) {
-        //     txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
-        //              std::to_string(user.id()) + ", '" + user.name() + "', '" +
-        //              user.created_at() +
-        //              "', '" + user.updated_at() + "')");
-        // } else if (method == putMethod) {
-        //     txn.exec("UPDATE users SET name='" + user.name() +
-        //              "', updated_at= NOW() WHERE id = " + to_string(user.id()));
-        // } else if (method == deleteMethod) {
-        //     txn.exec("DELETE FROM users WHERE id = " + to_string(user.id()));
-        // }
+        if (pub_port != sub_port) {
+            pqxx::work txn(database->get_connection());
 
-        // txn.commit();
+            std::string method = data["method"].GetString();
+            std::string postMethod = "POST";
+            std::string putMethod = "PUT";
+            std::string deleteMethod = "DELETE";
+
+            if (method == postMethod) {
+                txn.exec("INSERT INTO users (id, name, created_at, updated_at) VALUES (" +
+                         std::to_string(user.id()) + ", '" + user.name() + "', '" +
+                         user.created_at() + "', '" + user.updated_at() + "')");
+            } else if (method == putMethod) {
+                txn.exec("UPDATE users SET name='" + user.name() +
+                         "', updated_at= NOW() WHERE id = " + to_string(user.id()));
+            } else if (method == deleteMethod) {
+                txn.exec("DELETE FROM users WHERE id = " + to_string(user.id()));
+            }
+
+            txn.commit();
+        }
     }
 }
