@@ -51,7 +51,6 @@ void Subscriber::subscriber_listening() {
                 string message = recv_msgs[1].to_string();
                 thread send_to_sse_thread(ThreadsContainer::send_to_sse_thread, message);
                 send_to_sse_thread.join();
-                std::cout << "MessageQueue pushed: " << message << std::endl;
                 std::cout << "Subscriber received: " << recv_msgs[1].to_string() << std::endl;
             }
 
