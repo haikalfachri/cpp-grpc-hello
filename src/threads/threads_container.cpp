@@ -15,3 +15,7 @@ void ThreadsContainer::sse_server_thread() {
     sse_server = new SSEServer();
     sse_server->start_sse();
 }
+
+void ThreadsContainer::send_to_sse_thread(string message) {
+    sse_server->event_stream_handler(message);
+}

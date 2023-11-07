@@ -42,7 +42,8 @@ void Subscriber::subscriber_listening() {
         std::vector<zmq::message_t> recv_msgs = this->receive_message();
         if (recv_msgs.size() > 0) {
             string message = recv_msgs[1].to_string();
-            sse_server->event_stream_handler_ex(message);
+            thread send_to_sse_thread(ThreadsContainer::send_to_sse_thread);
+            // sse_server->event_stream_handler_ex(message);
             std::cout << "MessageQueue pushed: " << message << std::endl;
             std::cout << "Subscriber received: " << recv_msgs[1].to_string() << std::endl;
         }

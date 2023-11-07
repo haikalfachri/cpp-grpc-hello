@@ -14,7 +14,7 @@ void SSEServer::register_event_source_handler(const std::shared_ptr<Session> ses
     });
 }
 
-void SSEServer::event_stream_handler_ex(string message) {
+void SSEServer::event_stream_handler(string message) {
     try {
         sessions.erase(
             std::remove_if(sessions.begin(), sessions.end(),

@@ -5,4 +5,5 @@ class ThreadsContainer {
     static void publisher_thread();
     static void subscriber_thread();
     static void sse_server_thread();
+    static void send_to_sse_thread(string message);
 };
