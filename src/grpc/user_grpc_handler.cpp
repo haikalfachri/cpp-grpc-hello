@@ -1,6 +1,13 @@
 #include "user_grpc_handler.h"
 #include "../globals/globals.h"
 
+using user::User;
+using user::UserService;
+using google::protobuf::Empty;
+using google::protobuf::Int64Value;
+using grpc::Status;
+using namespace std;
+
 grpc::Status UserServiceImpl::CreateUser(grpc::ServerContext* context, const User* request, User* response) {
     User newUser;
     newUser.set_name(request->name());

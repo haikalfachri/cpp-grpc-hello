@@ -1,6 +1,9 @@
 #include "sse_handler.h"
-
 #include "../globals/globals.h"
+
+using namespace std;
+using namespace restbed;
+using namespace std::chrono;
 
 void SSEServer::register_event_source_handler(const std::shared_ptr<Session> session) {
     const auto headers =

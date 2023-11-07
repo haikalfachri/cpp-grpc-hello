@@ -3,7 +3,7 @@
 #include <iostream>
 #include <pqxx/pqxx>
 
-using namespace std;
+
 
 class Database {
   public:

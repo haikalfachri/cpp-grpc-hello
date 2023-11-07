@@ -1,6 +1,7 @@
 #include "threads_container.h"
-
 #include "../globals/globals.h"
+
+using namespace std;
 
 void ThreadsContainer::publisher_thread() {
     publisher = new Publisher();

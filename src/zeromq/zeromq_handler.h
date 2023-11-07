@@ -4,10 +4,7 @@
 #include <zmq.hpp>
 #include <zmq_addon.hpp>
 #include "../threads/threads_container.h"
-
 #include "iostream"
-
-using namespace std;
 
 class Publisher {
   private:

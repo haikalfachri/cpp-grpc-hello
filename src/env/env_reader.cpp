@@ -1,5 +1,6 @@
 #include "env_reader.h"
 
+using namespace std;  
 
 EnvReader::EnvReader(const std::string& filePath) {
     std::ifstream file(filePath);

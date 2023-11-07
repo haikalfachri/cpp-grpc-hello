@@ -8,17 +8,13 @@
 #include <string>
 #include "iostream"
 
-using namespace std;
-using namespace restbed;
-using namespace std::chrono;
-
 class SSEServer {
   public:
     void start_sse();
-    void event_stream_handler(string message);
+    void event_stream_handler(std::string message);
 
   private:
-    void register_event_source_handler(const std::shared_ptr<Session> session);
+    void register_event_source_handler(const std::shared_ptr<restbed::Session> session);
 
-    std::vector<std::shared_ptr<Session>> sessions;
+    std::vector<std::shared_ptr<restbed::Session>> sessions;
 };

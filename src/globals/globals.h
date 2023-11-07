@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-
 #include "../database/database.h"
 #include "../sse/sse_handler.h"
 #include "../zeromq/zeromq_handler.h"

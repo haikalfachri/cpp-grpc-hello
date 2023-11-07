@@ -1,10 +1,13 @@
 #include <iostream>
 #include <thread>
-
 #include "./globals/globals.h"
 #include "./grpc/user_grpc_handler.h"
 #include "./threads/threads_container.h"
 
+using user::UserService;
+using grpc::Server;
+using grpc::ServerBuilder;
+using grpc::ServerContext;
 using namespace std;
 
 /* Global variables and objects definition */
@@ -20,9 +23,9 @@ void RunApp() {
         env_reader = new EnvReader("../../.env");
 
         database = new Database();
-        database->create_table();
         pqxx::connection &db_connection = database->get_connection();
-        cout << db_connection.connection_string() << endl;
+        cout << "Data Source Name (DSN): " << db_connection.connection_string() << endl;
+        database->create_table();
 
         string app_url = env_reader->get("APP_URL");
         string app_port = env_reader->get("APP_PORT");
@@ -36,7 +39,9 @@ void RunApp() {
 
         unique_ptr<Server> server(builder.BuildAndStart());
         cout << "Server listening on http://" << server_address << endl;
-        cout << "SSE Server listening on http://" + env_reader->get("APP_URL") + ":" + env_reader->get("SSE_SERVER_PORT") << endl;
+        cout << "SSE Server listening on http://" + env_reader->get("APP_URL") + ":" +
+                    env_reader->get("SSE_SERVER_PORT")
+             << endl;
 
         thread publisher_thread(ThreadsContainer::publisher_thread);
         thread subscriber_thread(ThreadsContainer::subscriber_thread);
