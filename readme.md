@@ -1,4 +1,4 @@
-# Example GRPC using C++
+# Example gRPC + ZeroMQ + SSE using C++
 
 ## Important notes
 
@@ -24,7 +24,7 @@
     vcpkg integrate install
     ```
     
-    >**IMPORTANT**
+    >**Important**
     
     Put all ```find_packages``` and ```target_link_libraries``` in CMakeLists.txt
     
